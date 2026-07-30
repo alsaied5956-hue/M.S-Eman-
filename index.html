@@ -1,0 +1,1890 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منظومة الأستاذة إيمان الدمشتي - أستاذة الرياضيات</title>
+    <!-- مكتبة html2pdf لتوليد ملفات الـ PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap');
+
+        /* dynamic Variables - Dark Luxurious Theme (Default) */
+        :root {
+            --bg-dark: #070a11;
+            --card-bg: rgba(18, 25, 38, 0.85);
+            --card-border: rgba(212, 175, 55, 0.18);
+            --primary-gold: #e6c667;
+            --gold-gradient: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+            --accent-cyan: #00e5ff;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --input-bg: rgba(9, 14, 23, 0.9);
+            --table-header-bg: rgba(15, 23, 42, 0.95);
+            --hover-bg: rgba(212, 175, 55, 0.05);
+            --modal-bg: rgba(3, 7, 18, 0.75);
+            --success-color: #10b981;
+            --danger-color: #f43f5e;
+            --warning-color: #f59e0b;
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        /* Dynamic Variables - Light Luxurious Theme */
+        [data-theme="light"] {
+            --bg-dark: #f4f6f9;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --card-border: rgba(179, 135, 40, 0.25);
+            --primary-gold: #a3771e;
+            --gold-gradient: linear-gradient(135deg, #b38728 0%, #d4af37 50%, #966c15 100%);
+            --accent-cyan: #0284c7;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --input-bg: #ffffff;
+            --table-header-bg: #f8fafc;
+            --hover-bg: rgba(179, 135, 40, 0.06);
+            --modal-bg: rgba(15, 23, 42, 0.55);
+            --glass-shadow: 0 8px 25px 0 rgba(0, 0, 0, 0.08);
+        }
+
+        * { box-sizing: border-box; font-family: 'Tajawal', sans-serif; margin: 0; padding: 0; transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s; }
+        
+        body { 
+            background-color: var(--bg-dark); 
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(212, 175, 55, 0.08) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(0, 229, 255, 0.05) 0%, transparent 45%);
+            color: var(--text-main); 
+            display: flex; 
+            min-height: 100vh; 
+        }
+
+        /* 🔒 شاشة القفل الخارجية */
+        #auth-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-dark);
+            backdrop-filter: blur(15px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            flex-direction: column;
+        }
+        .auth-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            padding: 45px 40px;
+            border-radius: 24px;
+            border: 1px solid var(--primary-gold);
+            box-shadow: var(--glass-shadow), 0 0 25px rgba(212, 175, 55, 0.25);
+            text-align: center;
+            width: 380px;
+        }
+        .auth-card h2 { 
+            margin-bottom: 20px; 
+            color: var(--primary-gold);
+            font-size: 26px;
+            font-weight: 800;
+        }
+        .auth-card input {
+            width: 100%; padding: 14px; 
+            background: var(--input-bg);
+            border: 1px solid var(--primary-gold);
+            color: var(--text-main);
+            border-radius: 12px; font-size: 22px; text-align: center; margin-bottom: 20px;
+            letter-spacing: 6px; outline: none;
+        }
+
+        /* مؤشر حالة الاتصال */
+        #network-status-bar {
+            padding: 10px 18px;
+            font-size: 13px;
+            font-weight: 700;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+        .net-online { background-color: rgba(16, 185, 129, 0.12); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .net-offline { background-color: rgba(244, 63, 94, 0.12); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.3); }
+
+        /* Sidebar */
+        .sidebar { 
+            width: 290px; 
+            background-color: var(--card-bg); 
+            backdrop-filter: blur(10px);
+            border-left: 1px solid var(--card-border);
+            padding: 25px 15px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 8px; 
+        }
+        .sidebar-brand {
+            text-align: center;
+            padding-bottom: 20px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--card-border);
+        }
+        .sidebar-brand h2 { 
+            font-size: 22px; 
+            font-weight: 900;
+            color: var(--primary-gold);
+            letter-spacing: 0.5px;
+        }
+        .sidebar-brand p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+        .sidebar button { 
+            background: transparent; 
+            border: 1px solid transparent; 
+            color: var(--text-muted); 
+            padding: 12px 16px; 
+            text-align: right; 
+            font-size: 14px; 
+            font-weight: 700;
+            cursor: pointer; 
+            border-radius: 12px; 
+            transition: 0.3s; 
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .sidebar button:hover { 
+            background: rgba(212, 175, 55, 0.08); 
+            color: var(--primary-gold); 
+        }
+        .sidebar button.active { 
+            background: var(--gold-gradient); 
+            color: #000; 
+            font-weight: 800;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.35);
+        }
+
+        .theme-toggle-btn {
+            margin-top: auto;
+            background: var(--input-bg) !important;
+            border: 1px solid var(--card-border) !important;
+            color: var(--text-main) !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: bold !important;
+        }
+
+        .main-content { flex: 1; padding: 30px; overflow-y: auto; }
+        
+        .header { 
+            background: var(--card-bg); 
+            backdrop-filter: blur(10px);
+            padding: 20px 25px; 
+            border-radius: 16px; 
+            margin-bottom: 25px; 
+            border: 1px solid var(--card-border);
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            box-shadow: var(--glass-shadow);
+        }
+        .header h1 {
+            font-size: 20px;
+            color: var(--text-main);
+            font-weight: 800;
+        }
+        
+        .tab-content { 
+            display: none; 
+            background: var(--card-bg); 
+            backdrop-filter: blur(10px);
+            padding: 30px; 
+            border-radius: 16px; 
+            border: 1px solid var(--card-border);
+            box-shadow: var(--glass-shadow);
+        }
+        .tab-content.active { display: block; animation: fadeIn 0.4s ease-in-out; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 700; color: var(--text-muted); font-size: 14px; }
+        .form-group input, .form-group select, .form-group textarea { 
+            width: 100%; 
+            padding: 12px 15px; 
+            background: var(--input-bg);
+            border: 1px solid var(--card-border); 
+            color: var(--text-main);
+            border-radius: 10px; 
+            font-size: 15px; 
+            outline: none;
+            transition: 0.3s;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--primary-gold);
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.25);
+        }
+
+        button.btn { 
+            background: var(--gold-gradient); 
+            color: #000; 
+            border: none; 
+            padding: 12px 24px; 
+            font-size: 14px; 
+            font-weight: 800;
+            border-radius: 10px; 
+            cursor: pointer; 
+            transition: 0.3s; 
+        }
+        button.btn:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+        }
+
+        .stats-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 25px; }
+        .stat-card { 
+            background: var(--card-bg); 
+            backdrop-filter: blur(8px);
+            padding: 22px; 
+            border-radius: 14px; 
+            text-align: center; 
+            border: 1px solid var(--card-border);
+            border-top: 3px solid var(--primary-gold); 
+            box-shadow: var(--glass-shadow);
+        }
+        .stat-card h3 { font-size: 14px; color: var(--text-muted); margin-bottom: 8px; }
+        .stat-card p { font-size: 28px; font-weight: 900; color: var(--primary-gold); }
+
+        .engine-layout { display: flex; gap: 20px; margin-top: 20px; }
+        .engine-main { flex: 1.5; }
+        .engine-side-directory { 
+            flex: 1.5; 
+            background: var(--input-bg); 
+            border: 1px solid var(--card-border); 
+            padding: 20px; 
+            border-radius: 14px; 
+            max-height: 700px; 
+            overflow-y: auto; 
+        }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        table th, table td { 
+            border: 1px solid var(--card-border); 
+            padding: 14px 12px; 
+            text-align: right; 
+            font-size: 14px; 
+        }
+        table th { background-color: var(--table-header-bg); color: var(--primary-gold); font-weight: 800; }
+        table tbody tr:hover { background-color: var(--hover-bg); }
+
+        .status-paid { color: var(--success-color); font-weight: bold; }
+        .status-unpaid { color: var(--danger-color); font-weight: bold; }
+        .status-sent { color: var(--text-muted); font-weight: bold; background: rgba(0, 0, 0, 0.05); padding: 4px 8px; border-radius: 6px; font-size: 12px; }
+        .status-pending { color: var(--warning-color); font-weight: bold; background: rgba(245, 158, 11, 0.1); padding: 4px 8px; border-radius: 6px; font-size: 12px; }
+        
+        #loading-overlay { 
+            position: fixed; top:0; left:0; width:100%; height:100%; 
+            background: var(--bg-dark); 
+            display:flex; justify-content:center; align-items:center; 
+            z-index:9998; font-size:20px; font-weight:bold; color: var(--primary-gold); 
+        }
+
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-bg); justify-content: center; align-items: center; z-index: 10000; backdrop-filter: blur(8px); }
+        .modal-content { 
+            background: var(--card-bg); 
+            padding: 30px; 
+            border-radius: 18px; 
+            width: 500px; 
+            max-width: 90%; 
+            border: 1px solid var(--primary-gold);
+            box-shadow: var(--glass-shadow);
+            position: relative; 
+        }
+        .modal-header { font-size: 18px; font-weight: bold; color: var(--primary-gold); margin-bottom: 20px; border-bottom: 1px solid var(--card-border); padding-bottom: 10px; }
+        .modal-footer { margin-top: 20px; display: flex; justify-content: flex-end; gap: 10px; }
+        
+        .student-metric-tag { font-size: 12px; padding: 3px 8px; border-radius: 6px; margin-left: 4px; display: inline-block; font-weight: 600; }
+        .tag-attendance { background-color: rgba(16, 185, 129, 0.15); color: #10b981; }
+        .tag-absence { background-color: rgba(244, 63, 94, 0.15); color: var(--danger-color); }
+        .tag-grade { background-color: rgba(0, 229, 255, 0.15); color: var(--accent-cyan); }
+
+        /* كارت نتيجة السكانر التفاعلي */
+        .scan-card {
+            background: var(--input-bg);
+            border-radius: 14px;
+            padding: 22px;
+            margin-top: 20px;
+            border-right: 6px solid var(--primary-gold);
+            border-top: 1px solid var(--card-border);
+            border-left: 1px solid var(--card-border);
+            border-bottom: 1px solid var(--card-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            box-shadow: var(--glass-shadow);
+        }
+        .scan-card-info h3 { font-size: 18px; color: var(--text-main); margin-bottom: 8px; }
+        .scan-badges { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 5px; }
+        .badge { padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+        .badge-paid { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .badge-unpaid { background: rgba(244, 63, 94, 0.15); color: var(--danger-color); border: 1px solid rgba(244, 63, 94, 0.3); }
+        .badge-prev-att { background: rgba(0, 229, 255, 0.15); color: var(--accent-cyan); border: 1px solid rgba(0, 229, 255, 0.3); }
+        .badge-prev-abs { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
+
+        /* شريط التتبع والتمرير بين شاتات الواتساب */
+        #whatsapp-queue-banner {
+            display: none;
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white;
+            padding: 16px 22px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+        }
+        #whatsapp-queue-banner button {
+            background: white;
+            color: #128C7E;
+            font-weight: 800;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .select-group-inline {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        /* مفتاح تشغيل/إيقاف الصوت الصوتي للأسماء */
+        .speech-toggle-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        /* تنسيق طباعة الـ PDF المخفي */
+        #pdf-export-container {
+            display: none;
+            background: #ffffff;
+            color: #000000;
+            padding: 20px;
+            font-family: 'Tajawal', sans-serif;
+        }
+        .pdf-page {
+            page-break-after: always;
+            padding: 10px;
+        }
+        .pdf-header {
+            text-align: center;
+            border-bottom: 2px solid #d4af37;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .pdf-header h2 { color: #1e293b; font-size: 20px; margin-bottom: 5px; }
+        .pdf-header p { color: #64748b; font-size: 13px; }
+        .pdf-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .pdf-table th, .pdf-table td {
+            border: 1px solid #cbd5e1;
+            padding: 8px;
+            text-align: right;
+            font-size: 12px;
+            color: #000;
+        }
+        .pdf-table th { background-color: #f1f5f9; color: #0f172a; }
+    </style>
+</head>
+<body>
+
+    <!-- 🔒 شاشة القفل عند فتح الموقع -->
+    <div id="auth-overlay">
+        <div class="auth-card">
+            <h2>🔒 أمان المنظومة</h2>
+            <p style="margin-bottom: 15px; color: var(--text-muted); font-size: 14px;">أدخل كلمة المرور لتسجيل الدخول:</p>
+            <input type="password" id="site-password-input" placeholder="****" onkeypress="handlePasswordKey(event)">
+            <button class="btn" style="width: 100%;" onclick="verifySitePassword()">دخول النظام</button>
+        </div>
+    </div>
+
+    <div id="loading-overlay">⏳ جاري إعداد وتحديث البيانات...</div>
+
+    <!-- نافذة تغيير حالة الحضور والغياب للطالب -->
+    <div id="change-status-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">🔄 تغيير حالة الطالب (حضور / غياب)</div>
+            <form id="change-status-form" onsubmit="updateStudentStatus(event)">
+                <input type="hidden" id="status-stud-barcode">
+                <div class="form-group">
+                    <label>اسم الطالب</label>
+                    <input type="text" id="status-stud-name" readonly style="opacity:0.8; background:var(--input-bg);">
+                </div>
+                <div class="form-group">
+                    <label>الحالة الحالية والتاريخ</label>
+                    <input type="text" id="status-stud-date-info" readonly style="opacity:0.8; background:var(--input-bg);">
+                </div>
+                <div class="form-group">
+                    <label>اختر الحالة الجديدة:</label>
+                    <select id="status-new-select" required style="font-weight: bold; font-size: 16px;">
+                        <option value="حضور">🟢 حضور (في الموعد)</option>
+                        <option value="تأخير">🟡 تأخير</option>
+                        <option value="غائب">🔴 غائب</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" style="background: #334155; color: #fff;" onclick="closeStatusModal()">إلغاء</button>
+                    <button type="submit" class="btn">تحديث الحالة وإعادة الحسابات</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- نافذة تعديل بيانات الطالب -->
+    <div id="edit-student-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">✏️ تعديل بيانات الطالب</div>
+            <form id="edit-student-form" onsubmit="updateStudentData(event)">
+                <input type="hidden" id="edit-stud-barcode">
+                <div class="form-group"><label>اسم الطالب ثلاثي</label><input type="text" id="edit-stud-name" required></div>
+                <div class="form-group"><label>رقم تليفون الطالب</label><input type="text" id="edit-stud-phone" required></div>
+                <div class="form-group"><label>رقم تليفون ولي الأمر</label><input type="text" id="edit-stud-parent-phone" required></div>
+                
+                <div class="form-group">
+                    <label>الصف الدراسي</label>
+                    <select id="edit-stud-grade-select" required>
+                        <option value="الصف الرابع الابتدائي">الصف الرابع الابتدائي</option>
+                        <option value="الصف الخامس الابتدائي">الصف الخامس الابتدائي</option>
+                        <option value="الصف السادس الابتدائي">الصف السادس الابتدائي</option>
+                        <option value="الصف الأول الإعدادي">الصف الأول الإعدادي</option>
+                        <option value="الصف الثاني الإعدادي">الصف الثاني الإعدادي</option>
+                        <option value="الصف الثالث الإعدادي">الصف الثالث الإعدادي</option>
+                        <option value="الصف الأول الثانوي">الصف الأول الثانوي</option>
+                        <option value="الصف الثاني الثانوي">الصف الثاني الثانوي</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>أيام المجموعة</label>
+                    <select id="edit-stud-days-select" required>
+                        <option value="سبت - إثنين - أربعاء">سبت - إثنين - أربعاء</option>
+                        <option value="أحد - ثلاثاء - خميس">أحد - ثلاثاء - خميس</option>
+                    </select>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn" style="background: #334155; color: #fff;" onclick="closeEditModal()">إلغاء</button>
+                    <button type="submit" class="btn">تحديث وحفظ البيانات</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <div class="sidebar-brand">
+            <h2>إيمان الدمشتي</h2>
+            <p>أستاذة الرياضيات | 01070642904</p>
+        </div>
+        <button class="menu-btn active" onclick="switchTab('attendance-scan-tab')">📡 سكانر الحضور والتأخير</button>
+        <button class="menu-btn" onclick="switchTab('add-student-tab')">➕ إضافة طالب ومجموعة</button>
+        <button class="menu-btn" onclick="switchTab('stats-tab')">📋 تقرير الحضور اليومي والسابقي</button>
+        <button class="menu-btn" onclick="switchTab('cumulative-report-tab')">📊 سجل درجات ونسب الطلاب</button>
+        <button class="menu-btn" onclick="switchTab('expenses-tab')">💰 نظام المصروفات والإحصاء المالي</button>
+        <button class="menu-btn" onclick="switchTab('grades-tab')">📝 رصد درجات الامتحان</button>
+        <button class="menu-btn" onclick="switchTab('whatsapp-engine-tab')">🚀 المراسلة الفردية المباشرة</button>
+        <button class="menu-btn" style="background: var(--gold-gradient); color: #000; font-weight: 800;" onclick="exportAbsencePDFAndSendWhatsApp()">📄 تصدير تقرير غياب وتأخير اليوم (PDF)</button>
+        <button class="menu-btn" onclick="switchTab('manage-students-tab')" style="color: var(--danger-color);">❌ لوحة التحكم والتعديل</button>
+        <button class="menu-btn" onclick="switchTab('settings-tab')">🔑 إعدادات كلمة المرور</button>
+        
+        <!-- ☀️/🌙 زر التبديل بين الوضع المظلم والفاتح -->
+        <button class="theme-toggle-btn" onclick="toggleTheme()">
+            <span id="theme-btn-icon">☀️</span>
+            <span id="theme-btn-text">الوضع الفاتح</span>
+        </button>
+    </div>
+
+    <div class="main-content">
+        
+        <div id="network-status-bar" class="net-online">🟢 متصل بالإنترنت - البيانات متزامنة سحابياً</div>
+
+        <!-- شريط متابعة إرسال شاتات الواتساب المتتابعة -->
+        <div id="whatsapp-queue-banner">
+            <div>
+                <strong id="queue-status-text">📲 جاري إرسال الرسائل...</strong>
+                <p style="font-size: 13px; margin-top: 3px; opacity: 0.9;">اضغط الزر أو Enter للانتقال التلقائي للرسالة التالية</p>
+            </div>
+            <button id="next-queue-btn" onclick="openNextWhatsappChat()" autofocus>إرسال التالي (Enter) 📲</button>
+        </div>
+
+        <div class="header">
+            <h1 id="page-title">📡 جهاز سكانر الحضور مع الفحص التلقائي للتأخير والاشتراكات</h1>
+            <div style="display:flex; align-items:center; gap:20px;">
+                <label class="speech-toggle-wrapper">
+                    <input type="checkbox" id="enable-voice-toggle" checked style="width: auto;"> 🔊 النطق الصوتي للأسماء
+                </label>
+                <div id="current-date" style="font-weight: bold; color: var(--primary-gold);"></div>
+            </div>
+        </div>
+
+        <!-- 1. سكانر الحضور -->
+        <div id="attendance-scan-tab" class="tab-content active">
+            
+            <div style="background: var(--input-bg); padding: 18px; border-radius: 12px; margin-bottom: 25px; border: 1px solid var(--primary-gold); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                <div class="select-group-inline">
+                    <label style="font-weight: bold; font-size: 15px; color: var(--primary-gold);">المجموعة الحالية بالقاعة:</label>
+                    <select id="scan-grade-select" style="padding: 8px 12px; border-radius: 8px; font-size: 14px; background:var(--card-bg); border: 1px solid var(--card-border); color: var(--text-main);">
+                        <option value="الصف الرابع الابتدائي">الصف الرابع الابتدائي</option>
+                        <option value="الصف الخامس الابتدائي">الصف الخامس الابتدائي</option>
+                        <option value="الصف السادس الابتدائي">الصف السادس الابتدائي</option>
+                        <option value="الصف الأول الإعدادي">الصف الأول الإعدادي</option>
+                        <option value="الصف الثاني الإعدادي">الصف الثاني الإعدادي</option>
+                        <option value="الصف الثالث الإعدادي">الصف الثالث الإعدادي</option>
+                        <option value="الصف الأول الثانوي">الصف الأول الثانوي</option>
+                        <option value="الصف الثاني الثانوي">الصف الثاني الثانوي</option>
+                    </select>
+                    
+                    <select id="scan-days-select" style="padding: 8px 12px; border-radius: 8px; font-size: 14px; background:var(--card-bg); border: 1px solid var(--card-border); color: var(--text-main);">
+                        <option value="سبت - إثنين - أربعاء">سبت - إثنين - أربعاء</option>
+                        <option value="أحد - ثلاثاء - خميس">أحد - ثلاثاء - خميس</option>
+                    </select>
+                </div>
+                <button class="btn" style="background: var(--danger-color); color: #fff;" onclick="finishGroupAttendance()">🔒 حفظ وإرسال الغياب والتأخير للكل بضغطة واحدة</button>
+            </div>
+
+            <div class="form-group" style="max-width: 500px; margin: 0 auto; text-align: center;">
+                <label style="font-size: 18px; margin-bottom: 15px; color: var(--primary-gold);">ضع المؤشر هنا ومرر كارت الطالب أمام الإسكانر</label>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <input type="text" id="barcode-scanner-input" placeholder="انتظار قراءة الباركود الآلية..." autofocus onkeypress="handleBarcodeScan(event)" style="text-align: center; font-size: 22px; padding: 12px; border: 2px solid var(--primary-gold); flex: 1;">
+                    <button class="btn" style="background: var(--accent-cyan); color: #000; padding: 12px 18px; white-space: nowrap; font-size: 14px;" onclick="addManualStudentAttendance()">➕ إضافة/تعويض يدوي</button>
+                </div>
+                <span style="font-size: 12px; color: var(--text-muted); margin-top: 6px; display: block;">ملاحظة: زر الإضافة اليدوية يسمح بتسجيل حضور الطالب التعويضي في هذه المجموعة بغض النظر عن مجموعته الأصلية.</span>
+            </div>
+            
+            <!-- نتيجة السكانر التفصيلية المباشرة -->
+            <div id="scan-result"></div>
+            
+            <div style="margin-top: 35px;">
+                <h3 style="margin-bottom: 12px; color: var(--primary-gold); border-bottom: 1px solid var(--card-border); padding-bottom: 8px;">📋 قائمة الحضور الحالية (مترقمة تنازلياً مع إظهار حالة الاشتراك والحصة السابقة)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>الترتيب</th>
+                            <th>الباركود</th>
+                            <th>اسم الطالب</th>
+                            <th>المجموعة</th>
+                            <th>حالة الاشتراك</th>
+                            <th>الحصة السابقة</th>
+                            <th>حالة اليوم</th>
+                            <th>وقت الدخول</th>
+                        </tr>
+                    </thead>
+                    <tbody id="scan-log-table-body">
+                        <tr><td colspan="8" style="text-align:center; color:var(--text-muted); font-style:italic;">في انتظار أول قراءة حضور...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 2. إضافة طالب -->
+        <div id="add-student-tab" class="tab-content">
+            <h2 style="color: var(--primary-gold); font-size: 18px; margin-bottom: 15px;">تسجيل طالب جديد وتحديد صفه الدراسي ومجموعته</h2>
+            <form id="student-form" onsubmit="saveStudent(event)" style="max-width: 600px; margin-top: 20px;">
+                <div class="form-group"><label>الرقم التسلسلي لكارت الباركود</label><input type="text" id="stud-barcode" required></div>
+                <div class="form-group"><label>اسم الطالب ثلاثي</label><input type="text" id="stud-name" required></div>
+                <div class="form-group"><label>رقم تليفون الطالب</label><input type="text" id="stud-phone" required placeholder="01xxxxxxxxx"></div>
+                <div class="form-group"><label>رقم تليفون ولي الأمر</label><input type="text" id="stud-parent-phone" required placeholder="01xxxxxxxxx"></div>
+                
+                <div class="form-group">
+                    <label>الصف الدراسي</label>
+                    <select id="stud-grade-select" required>
+                        <option value="الصف الرابع الابتدائي">الصف الرابع الابتدائي</option>
+                        <option value="الصف الخامس الابتدائي">الصف الخامس الابتدائي</option>
+                        <option value="الصف السادس الابتدائي">الصف السادس الابتدائي</option>
+                        <option value="الصف الأول الإعدادي">الصف الأول الإعدادي</option>
+                        <option value="الصف الثاني الإعدادي">الصف الثاني الإعدادي</option>
+                        <option value="الصف الثالث الإعدادي">الصف الثالث الإعدادي</option>
+                        <option value="الصف الأول الثانوي">الصف الأول الثانوي</option>
+                        <option value="الصف الثاني الثانوي">الصف الثاني الثانوي</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>أيام المجموعة</label>
+                    <select id="stud-days-select" required>
+                        <option value="سبت - إثنين - أربعاء">سبت - إثنين - أربعاء</option>
+                        <option value="أحد - ثلاثاء - خميس">أحد - ثلاثاء - خميس</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn">حفظ وتأكيد بيانات الطالب</button>
+            </form>
+        </div>
+
+        <!-- 3. التقرير اليومي والأرشيف السابقي -->
+        <div id="stats-tab" class="tab-content">
+            <div class="stats-container">
+                <div class="stat-card"><h3>إجمالي الطلاب المسجلين</h3><p id="total-students-count">0</p></div>
+                <div class="stat-card"><h3>حضور وتأخير التاريخ المختار</h3><p id="present-count" style="color: #10b981;">0</p></div>
+                <div class="stat-card"><h3>إجمالي غياب التاريخ المختار</h3><p id="absent-count" style="color: #f43f5e;">0</p></div>
+            </div>
+            
+            <div style="display: flex; gap: 15px; margin-bottom: 20px; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+                <div class="select-group-inline">
+                    <label style="font-weight: bold; font-size: 14px;">تحديد تاريخ السجل:</label>
+                    <input type="date" id="attendance-history-date-picker" onchange="renderAttendanceStats()" style="padding: 8px 12px; background:var(--input-bg); border:1px solid var(--card-border); color:var(--text-main); border-radius:8px;">
+
+                    <label style="font-weight: bold; font-size: 14px; margin-right: 15px;">تصفية الصف والأيام:</label>
+                    <select id="filter-grade-select" onchange="renderAttendanceStats()" style="padding: 8px 12px; background:var(--input-bg); border: 1px solid var(--card-border); color:var(--text-main); border-radius: 8px;">
+                        <option value="ALL">كل الصفوف الدراسية</option>
+                        <option value="الصف الرابع الابتدائي">الصف الرابع الابتدائي</option>
+                        <option value="الصف الخامس الابتدائي">الصف الخامس الابتدائي</option>
+                        <option value="الصف السادس الابتدائي">الصف السادس الابتدائي</option>
+                        <option value="الصف الأول الإعدادي">الصف الأول الإعدادي</option>
+                        <option value="الصف الثاني الإعدادي">الصف الثاني الإعدادي</option>
+                        <option value="الصف الثالث الإعدادي">الصف الثالث الإعدادي</option>
+                        <option value="الصف الأول الثانوي">الصف الأول الثانوي</option>
+                        <option value="الصف الثاني الثانوي">الصف الثاني الثانوي</option>
+                    </select>
+
+                    <select id="filter-days-select" onchange="renderAttendanceStats()" style="padding: 8px 12px; background:var(--input-bg); border: 1px solid var(--card-border); color:var(--text-main); border-radius: 8px;">
+                        <option value="ALL">كل الأيام</option>
+                        <option value="سبت - إثنين - أربعاء">سبت - إثنين - أربعاء</option>
+                        <option value="أحد - ثلاثاء - خميس">أحد - ثلاثاء - خميس</option>
+                    </select>
+                </div>
+                <div>
+                    <button class="btn" style="background: #10b981; color: #fff;" onclick="exportAttendanceToExcel()">📥 تصدير التقرير لملف Excel</button>
+                </div>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>الباركود</th>
+                        <th>اسم الطالب</th>
+                        <th>المجموعة</th>
+                        <th>حالة التاريخ المختار</th>
+                        <th>رقم ولي الأمر</th>
+                        <th>إجراء والتعديل</th>
+                    </tr>
+                </thead>
+                <tbody id="daily-attendance-table-body"></tbody>
+            </table>
+        </div>
+
+        <!-- 4. سجل درجات ونسب الطلاب التراكمية -->
+        <div id="cumulative-report-tab" class="tab-content">
+            <h2 style="color: var(--primary-gold); font-size: 18px; margin-bottom: 5px;">📊 النسب المئوية التراكمية وسجلات الدرجات للطلاب</h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 14px;">يحتوي هذا الجدول على الأداء العام للطلاب، ونسب حضورهم وغيابهم الإجمالية منذ البداية.</p>
+            
+            <div class="form-group" style="max-width: 400px;">
+                <input type="text" id="search-cumulative-input" oninput="renderCumulativeTable()" placeholder="بحث سريع باسم الطالب أو الباركود...">
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>الباركود</th>
+                        <th>اسم الطالب</th>
+                        <th>المجموعة</th>
+                        <th>نسبة الحضور التراكمية</th>
+                        <th>نسبة الغياب التراكمية</th>
+                        <th>متوسط درجات الامتحانات</th>
+                        <th>إجمالي النقاط ⭐</th>
+                    </tr>
+                </thead>
+                <tbody id="cumulative-table-body"></tbody>
+            </table>
+        </div>
+
+        <!-- 5. الاشتراكات والمصروفات ولوحة الإحصاء المالي -->
+        <div id="expenses-tab" class="tab-content">
+            <h2 style="color: var(--primary-gold); font-size: 18px; margin-bottom: 5px;">💰 منظومة دفع المصروفات والاشتراكات الشهرية والإحصاء المالي</h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 14px;">لا يمكن دفع اشتراك جديد لنفس الطالب إلا بمرور بحد أدنى 20 يوماً على آخر عملية دفع.</p>
+            
+            <!-- لوحة الإحصاء المالي للمصروفات -->
+            <div class="stats-container" style="margin-top: 15px;">
+                <div class="stat-card"><h3>عدد الاشتراكات المدفوعة</h3><p id="financial-paid-count" style="color:#10b981;">0</p></div>
+                <div class="stat-card"><h3>اشتراكات غير مدفوعة / مستحقة</h3><p id="financial-unpaid-count" style="color:#f43f5e;">0</p></div>
+            </div>
+
+            <div class="form-group" style="max-width: 450px; display: flex; gap: 10px; margin-top: 15px;">
+                <input type="text" id="expense-search-barcode" placeholder="اضرب باركود الطالب لتأكيد دفع الاشتراك">
+                <button class="btn" onclick="payExpenses()">إثبات السداد</button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>الباركود</th>
+                        <th>اسم الطالب</th>
+                        <th>آخر تاريخ دفع</th>
+                        <th>تاريخ الاستحقاق القادم (بعد 20 يوم)</th>
+                        <th>حالة السداد</th>
+                    </tr>
+                </thead>
+                <tbody id="expenses-table-body"></tbody>
+            </table>
+        </div>
+
+        <!-- 6. رصد الدرجات -->
+        <div id="grades-tab" class="tab-content">
+            <h2 style="color: var(--primary-gold); font-size: 18px; margin-bottom: 15px;">رصد وإضافة نتائج الاختبارات الفورية</h2>
+            <form id="grade-form" onsubmit="saveGradeDirectly(event)" style="max-width: 600px; margin-top: 20px;">
+                <div class="form-group"><label>عنوان أو اسم الامتحان</label><input type="text" id="exam-title" required placeholder="مثال: امتحان رياضيات شهر يوليو"></div>
+                <div class="form-group"><label>باركود الطالب</label><input type="text" id="exam-student-barcode" required></div>
+                <div class="form-group"><label>الدرجة التي حصل عليها</label><input type="text" id="exam-score" required placeholder="مثال: 20 من 20 أو 100"></div>
+                <button type="submit" class="btn">حفظ النتيجة في ملف الطالب</button>
+            </form>
+        </div>
+
+        <!-- 7. نظام المراسلة الفردية المباشرة والدليل الجانبي -->
+        <div id="whatsapp-engine-tab" class="tab-content">
+            <div class="engine-layout">
+                <div class="engine-main">
+                    <h2 style="color: var(--primary-gold); font-size: 18px;">📱 نظام المراسلة الفردية المباشرة</h2>
+                    <p style="color: var(--text-muted); margin-top: 5px; font-size: 14px;">إرسال رسالة مخصصة أو تقرير مباشر لولي أمر طالب محدد عبر الواتساب دون وضع رسائل مكررة في الانتظار.</p>
+                    
+                    <div style="background: var(--input-bg); padding: 20px; border-radius: 12px; border: 1px solid var(--card-border); margin-top: 20px;">
+                        <div class="form-group">
+                            <label>حدد الطالب المراد مراسلته:</label>
+                            <select id="direct-student-select" onchange="populateDirectMessageForm()" style="background: var(--card-bg);">
+                                <option value="">-- اختر الطالب --</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>رقم ولي الأمر:</label>
+                            <input type="text" id="direct-parent-phone" placeholder="سيظهر تلقائياً..." readonly style="opacity: 0.8;">
+                        </div>
+                        <div class="form-group">
+                            <label>نص الرسالة:</label>
+                            <textarea id="direct-message-text" rows="5" placeholder="اكتب نص الرسالة المخصصة هنا..."></textarea>
+                        </div>
+                        <button class="btn" style="background: #25D366; color: #fff; width: 100%; font-size: 16px;" onclick="sendDirectCustomMessage()">إرسال الرسالة الآن عبر الواتساب 📲</button>
+                    </div>
+                </div>
+                <div class="engine-side-directory">
+                    <h3 style="border-bottom: 1px solid var(--card-border); padding-bottom: 8px; margin-bottom: 12px; color: var(--primary-gold); font-size: 16px;">👥 دليل الطلاب الكامل ونسب الأداء</h3>
+                    <div id="directory-list"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. لوحة التحكم -->
+        <div id="manage-students-tab" class="tab-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                <h2 style="color: var(--primary-gold); font-size: 18px;">❌ لوحة التحكم وإدارة بيانات الطلاب والغياب</h2>
+                <button class="btn" style="background: var(--danger-color); color:#fff;" onclick="clearAllSystemData()">🗑️ مسح كل البيانات</button>
+            </div>
+            
+            <div class="form-group" style="max-width: 500px; margin-top: 20px;">
+                <label>ابحث هنا لتعديل أو حذف الطالب (اسم / تليفون / باركود):</label>
+                <input type="text" id="search-manage-input" oninput="renderManageStudentsTable()" placeholder="اكتب للبحث الفوري...">
+            </div>
+            <table>
+                <thead>
+                    <tr><th>الباركود</th><th>اسم الطالب</th><th>النقاط الحالية</th><th>نسبة الامتحانات</th><th>نسبة الغياب</th><th>إجراءات التحكم</th></tr>
+                </thead>
+                <tbody id="manage-students-table-body"></tbody>
+            </table>
+        </div>
+
+        <!-- 9. قسم إعدادات وتغيير كلمة المرور -->
+        <div id="settings-tab" class="tab-content">
+            <h2 style="color: var(--primary-gold); font-size: 18px; margin-bottom: 15px;">🔑 تغيير كلمة مرور النظام</h2>
+            <form id="change-password-form" onsubmit="changeSystemPassword(event)" style="max-width: 500px; margin-top: 20px;">
+                <div class="form-group">
+                    <label>كلمة المرور الحالية</label>
+                    <input type="password" id="current-password-input" required placeholder="أدخل كلمة المرور الحالية">
+                </div>
+                <div class="form-group">
+                    <label>كلمة المرور الجديدة</label>
+                    <input type="password" id="new-password-input" required placeholder="أدخل كلمة المرور الجديدة">
+                </div>
+                <div class="form-group">
+                    <label>تأكيد كلمة المرور الجديدة</label>
+                    <input type="password" id="confirm-password-input" required placeholder="إعادة كتابة كلمة المرور الجديدة">
+                </div>
+                <button type="submit" class="btn">حفظ وتغيير كلمة المرور</button>
+            </form>
+        </div>
+
+    </div>
+
+    <!-- حاوية غير ظاهرة لتجهيز وتصدير الـ PDF -->
+    <div id="pdf-export-container"></div>
+
+    <script>
+        const cloudUrl = "https://script.google.com/macros/s/AKfycbwi5OCC1hWW6RiwvBy5cU4O4fsSPzQ4cqy7lVbkAOo09vz6LbOlxqq27JwPh7lAO7am/exec";
+        
+        window.adminPassword = localStorage.getItem('system_admin_password') || "2468"; 
+
+        window.students = [];
+        window.attendanceHistory = {}; // الأرشيف التاريخي الكامل للسيستم { YYYY-MM-DD: { barcode: status } }
+        window.attendanceToday = {};
+        window.payments = {};
+        window.sendLogToday = {};
+        window.scanLogOrder = []; 
+        window.whatsappQueue = []; 
+        window.isAuthenticated = false;
+        window.isPendingSync = false;
+        window.lastAutoSaveHour = -1;
+
+        const getTodayKey = () => new Date().toISOString().split('T')[0];
+
+        document.getElementById('current-date').innerText = new Date().toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        document.getElementById('attendance-history-date-picker').value = getTodayKey();
+
+        /* ☀️/🌙 ثيم الوضع الفاتح والداكن */
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeButton(savedTheme);
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeButton(newTheme);
+        }
+
+        function updateThemeButton(theme) {
+            const icon = document.getElementById('theme-btn-icon');
+            const text = document.getElementById('theme-btn-text');
+            if (theme === 'light') {
+                icon.innerText = '🌙';
+                text.innerText = 'الوضع المظلم';
+            } else {
+                icon.innerText = '☀️';
+                text.innerText = 'الوضع الفاتح';
+            }
+        }
+
+        function speakName(name) {
+            const voiceToggle = document.getElementById('enable-voice-toggle');
+            if (voiceToggle && voiceToggle.checked && 'speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const msg = new SpeechSynthesisUtterance(`أهلاً ${name}`);
+                msg.lang = 'ar-SA';
+                msg.rate = 0.9;
+                window.speechSynthesis.speak(msg);
+            }
+        }
+
+        function getSelectedScanGroup() {
+            const grade = document.getElementById('scan-grade-select').value;
+            const days = document.getElementById('scan-days-select').value;
+            return `${grade} (${days})`;
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const queueBanner = document.getElementById('whatsapp-queue-banner');
+                if (queueBanner && queueBanner.style.display === 'flex') {
+                    const activeElement = document.activeElement;
+                    if (activeElement.tagName !== 'INPUT' && activeElement.tagName !== 'SELECT' && activeElement.tagName !== 'TEXTAREA') {
+                        e.preventDefault();
+                        openNextWhatsappChat();
+                    }
+                }
+            }
+        });
+
+        setInterval(() => {
+            const now = new Date();
+            const minutes = now.getMinutes();
+            const hours = now.getHours();
+
+            if (minutes === 30 && window.lastAutoSaveHour !== hours) {
+                window.lastAutoSaveHour = hours;
+                finishGroupAttendance(true);
+            }
+        }, 1000);
+
+        function verifySitePassword() {
+            const input = document.getElementById('site-password-input').value;
+            if (input === window.adminPassword) {
+                document.getElementById('auth-overlay').style.display = 'none';
+                window.isAuthenticated = true;
+                setTimeout(() => document.getElementById('barcode-scanner-input').focus(), 300);
+            } else {
+                alert("❌ كلمة المرور غير صحيحة!");
+                document.getElementById('site-password-input').value = '';
+            }
+        }
+
+        function changeSystemPassword(e) {
+            e.preventDefault();
+            const currentPass = document.getElementById('current-password-input').value;
+            const newPass = document.getElementById('new-password-input').value;
+            const confirmPass = document.getElementById('confirm-password-input').value;
+
+            if (currentPass !== window.adminPassword) {
+                alert("❌ كلمة المرور الحالية غير صحيحة!");
+                return;
+            }
+
+            if (newPass !== confirmPass) {
+                alert("⚠️ كلمة المرور الجديدة وتأكيدها غير متطابقين!");
+                return;
+            }
+
+            if (newPass.trim() === "") {
+                alert("⚠️ لا يمكن ترك كلمة المرور فارغة!");
+                return;
+            }
+
+            window.adminPassword = newPass;
+            localStorage.setItem('system_admin_password', newPass);
+            alert("✅ تم تغيير كلمة المرور بنجاح!");
+            document.getElementById('change-password-form').reset();
+        }
+
+        function handlePasswordKey(e) {
+            if (e.key === 'Enter') verifySitePassword();
+        }
+
+        function playBeep(type) {
+            const context = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = context.createOscillator();
+            const gain = context.createGain();
+            osc.connect(gain);
+            gain.connect(context.destination);
+            if (type === 'success') { osc.frequency.setValueAtTime(587.33, context.currentTime); gain.gain.setValueAtTime(0.1, context.currentTime); osc.start(); osc.stop(context.currentTime + 0.15); }
+            else if (type === 'warning') { osc.frequency.setValueAtTime(880, context.currentTime); gain.gain.setValueAtTime(0.15, context.currentTime); osc.start(); setTimeout(() => osc.frequency.setValueAtTime(440, context.currentTime), 100); osc.stop(context.currentTime + 0.3); }
+            else if (type === 'error') { osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, context.currentTime); gain.gain.setValueAtTime(0.2, context.currentTime); osc.start(); osc.stop(context.currentTime + 0.4); }
+        }
+
+        function updateNetworkStatus() {
+            const statusBar = document.getElementById('network-status-bar');
+            if (navigator.onLine) {
+                statusBar.className = 'net-online';
+                statusBar.innerHTML = '🟢 متصل بالإنترنت - البيانات متزامنة سحابياً';
+                if (window.isPendingSync) {
+                    syncLocalDataToCloud();
+                }
+            } else {
+                statusBar.className = 'net-offline';
+                statusBar.innerHTML = '🔴 غير متصل بالإنترنت - يتم الحفظ محلياً على جهازك تلقائياً';
+            }
+        }
+
+        window.addEventListener('online', updateNetworkStatus);
+        window.addEventListener('offline', updateNetworkStatus);
+
+        async function loadInitialData() {
+            initTheme();
+            const localData = localStorage.getItem('center_data');
+            if (localData) {
+                try {
+                    const parsed = JSON.parse(localData);
+                    window.students = parsed.students || [];
+                    window.attendanceHistory = parsed.attendanceHistory || {};
+                    
+                    const todayKey = getTodayKey();
+                    window.attendanceToday = window.attendanceHistory[todayKey] || parsed.attendanceToday || {};
+                    window.payments = parsed.payments || {};
+                    window.sendLogToday = parsed.sendLogToday || {};
+                    window.scanLogOrder = parsed.scanLogOrder || [];
+                } catch(e) {}
+            }
+
+            if (navigator.onLine) {
+                try {
+                    const response = await fetch(cloudUrl);
+                    const data = await response.json();
+                    
+                    if (!window.isPendingSync) {
+                        window.students = data.students || window.students;
+                        window.attendanceHistory = data.attendanceHistory || window.attendanceHistory || {};
+                        const todayKey = getTodayKey();
+                        window.attendanceToday = window.attendanceHistory[todayKey] || data.attendanceToday || window.attendanceToday;
+                        window.payments = data.payments || window.payments;
+                        window.sendLogToday = data.sendLogToday || window.sendLogToday;
+                        saveToLocalOnly();
+                    }
+                } catch (e) {
+                    console.log("تعذر الاتصال بالسحابة، الاعتماد على الحفظ المحلي.");
+                }
+            }
+
+            document.getElementById('loading-overlay').style.display = 'none';
+            updateNetworkStatus();
+            refreshUI();
+        }
+
+        function saveToLocalOnly() {
+            const todayKey = getTodayKey();
+            if (!window.attendanceHistory) window.attendanceHistory = {};
+            window.attendanceHistory[todayKey] = window.attendanceToday;
+
+            const payload = {
+                students: window.students,
+                attendanceHistory: window.attendanceHistory,
+                attendanceToday: window.attendanceToday,
+                payments: window.payments,
+                sendLogToday: window.sendLogToday,
+                scanLogOrder: window.scanLogOrder
+            };
+            localStorage.setItem('center_data', JSON.stringify(payload));
+            refreshUI();
+        }
+
+        async function saveData() {
+            saveToLocalOnly();
+            if (navigator.onLine) {
+                syncLocalDataToCloud();
+            } else {
+                window.isPendingSync = true;
+            }
+        }
+
+        async function syncLocalDataToCloud() {
+            const todayKey = getTodayKey();
+            if (!window.attendanceHistory) window.attendanceHistory = {};
+            window.attendanceHistory[todayKey] = window.attendanceToday;
+
+            const payload = {
+                students: window.students,
+                attendanceHistory: window.attendanceHistory,
+                attendanceToday: window.attendanceToday,
+                payments: window.payments,
+                sendLogToday: window.sendLogToday
+            };
+            
+            try {
+                await fetch(cloudUrl, {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+                window.isPendingSync = false;
+                const statusBar = document.getElementById('network-status-bar');
+                statusBar.innerHTML = '🟢 متصل بالإنترنت - تم مزامنة البيانات السحابية بنجاح';
+            } catch(e) {
+                window.isPendingSync = true;
+            }
+        }
+
+        function refreshUI() {
+            renderSideDirectory(); renderAttendanceStats(); renderCumulativeTable(); renderExpenses(); renderManageStudentsTable(); renderScanLogTable(); populateDirectStudentDropdown();
+        }
+
+        function getExamAverage(student) { if(!student.totalExamScores || student.totalExamScores.length === 0) return 0; return Math.round(student.totalExamScores.reduce((a, b) => a + b, 0) / student.totalExamScores.length); }
+        function getAbsenceRate(student) { const totalDays = (student.totalAttendanceDays || 0) + (student.totalAbsentDays || 0); if(totalDays === 0) return 0; return Math.round(((student.totalAbsentDays || 0) / totalDays) * 100); }
+        function getAttendanceRate(student) { const totalDays = (student.totalAttendanceDays || 0) + (student.totalAbsentDays || 0); if(totalDays === 0) return 100; return Math.round(((student.totalAttendanceDays || 0) / totalDays) * 100); }
+
+        window.renderSideDirectory = function() {
+            const dirContainer = document.getElementById('directory-list'); if(!dirContainer) return; dirContainer.innerHTML = '';
+            if(window.students.length === 0) { dirContainer.innerHTML = '<p style="color:var(--text-muted); font-style:italic;">لا يوجد طلاب حالياً</p>'; return; }
+            
+            let sortedStudents = [...window.students].sort((a, b) => {
+                const aSent = window.sendLogToday[a.barcode] ? 1 : 0;
+                const bSent = window.sendLogToday[b.barcode] ? 1 : 0;
+                return aSent - bSent;
+            });
+
+            sortedStudents.forEach((student, index) => {
+                const isSent = window.sendLogToday[student.barcode];
+                const attendanceRate = getAttendanceRate(student);
+                const absenceRate = getAbsenceRate(student);
+                const examAvg = getExamAverage(student);
+
+                dirContainer.innerHTML += `
+                    <div style="padding: 12px; border-bottom: 1px dashed var(--card-border); font-size: 13px; background: ${isSent ? 'var(--hover-bg)' : 'var(--card-bg)'}; margin-bottom: 8px; border-radius: 8px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                            <span style="font-weight:bold; color:var(--text-main); font-size:14px;">${index + 1}. ${student.name}</span>
+                            ${isSent ? `<span class="status-sent">✅ تم الإرسال</span>` : `<span class="status-pending">⏳ في انتظار الإرسال</span>`}
+                        </div>
+                        <div style="margin: 6px 0;">
+                            <span class="student-metric-tag tag-attendance">حضور: ${attendanceRate}%</span>
+                            <span class="student-metric-tag tag-absence">غياب: ${absenceRate}%</span>
+                            <span class="student-metric-tag tag-grade">رياضيات: ${examAvg}%</span>
+                            <span class="student-metric-tag" style="background:rgba(212,175,55,0.15); color:var(--primary-gold);">⭐ ${student.points || 0} ن</span>
+                        </div>
+                        <button class="btn" style="background: #25D366; color: #fff; padding: 6px 10px; font-size: 12px; width: 100%; margin-top: 6px;" onclick="sendSingleAbsenceMessage('${student.barcode}')">إرسال تقرير فردي مباشر ✉️</button>
+                    </div>`;
+            });
+        }
+
+        /* المراسلة المباشرة الفردية بدون قائمة تكرارية */
+        function populateDirectStudentDropdown() {
+            const select = document.getElementById('direct-student-select');
+            if(!select) return;
+            select.innerHTML = '<option value="">-- اختر الطالب --</option>';
+            window.students.forEach(student => {
+                select.innerHTML += `<option value="${student.barcode}">${student.name} - ${student.groupGrade}</option>`;
+            });
+        }
+
+        function populateDirectMessageForm() {
+            const barcode = document.getElementById('direct-student-select').value;
+            const student = window.students.find(s => s.barcode === barcode);
+            if(student) {
+                document.getElementById('direct-parent-phone').value = student.parentPhone;
+                const attendanceStatus = window.attendanceToday[barcode] || "غائب";
+                let defaultMsg = `الأستاذة إيمان الدمشتي - أستاذة الرياضيات 📐\nإلى ولي أمر الطالب/ة: ${student.name}\n\nنحيطكم علماً بأن حالة الحضور اليوم: ${attendanceStatus === 'حضور' ? '✅ حاضر' : (attendanceStatus === 'تأخير' ? '⚠️ متأخر' : '❌ غائب')}`;
+                if(student.lastExamTitle && student.lastExamScore) {
+                    defaultMsg += `\nآخر درجة امتحان (${student.lastExamTitle}): ${student.lastExamScore}`;
+                }
+                document.getElementById('direct-message-text').value = defaultMsg;
+            } else {
+                document.getElementById('direct-parent-phone').value = '';
+                document.getElementById('direct-message-text').value = '';
+            }
+        }
+
+        function sendDirectCustomMessage() {
+            const barcode = document.getElementById('direct-student-select').value;
+            const student = window.students.find(s => s.barcode === barcode);
+            const msg = document.getElementById('direct-message-text').value.trim();
+            if(!student || !msg) {
+                alert("يرجى اختيار طالب وكتابة الرسالة المخصصة أولاً!");
+                return;
+            }
+            let formattedPhone = student.parentPhone.trim();
+            if(formattedPhone.startsWith('0')) formattedPhone = '2' + formattedPhone;
+            window.sendLogToday[barcode] = new Date().toLocaleTimeString('ar-EG');
+            saveData();
+            window.open(`whatsapp://send?phone=${formattedPhone}&text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        window.renderScanLogTable = function() {
+            const tbody = document.getElementById('scan-log-table-body'); if(!tbody) return;
+            if(!window.scanLogOrder || window.scanLogOrder.length === 0) { tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; color:var(--text-muted); font-style:italic;">في انتظار أول قراءة حضور...</td></tr>`; return; }
+            tbody.innerHTML = '';
+            
+            const totalCount = window.scanLogOrder.length;
+            for (let i = totalCount - 1; i >= 0; i--) {
+                const item = window.scanLogOrder[i];
+                const displayRank = i + 1;
+                
+                const isPaid = item.paymentStatus === 'تم الدفع';
+                const payBadge = isPaid ? `<span class="badge badge-paid">✅ تم الدفع</span>` : `<span class="badge badge-unpaid">❌ غير مدفوع</span>`;
+                const prevBadge = item.lastAttendance === 'غائب' ? `<span class="badge badge-prev-abs">❌ كان غائباً</span>` : `<span class="badge badge-prev-att">✅ ${item.lastAttendance}</span>`;
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${displayRank}</strong></td>
+                        <td>${item.barcode}</td>
+                        <td><strong>${item.name}</strong></td>
+                        <td>${item.groupText}</td>
+                        <td>${payBadge}</td>
+                        <td>${prevBadge}</td>
+                        <td class="${item.status === 'حضور' ? 'status-paid' : 'status-unpaid'}">${item.status === "حضور" ? "حاضر (في الموعد)" : "متأخر"}</td>
+                        <td>${item.time}</td>
+                    </tr>`;
+            }
+        }
+
+        /* وظيفة معالجة تسجيل الحضور التلقائية واليدوية */
+        function processAttendanceRecord(student, isManual = false) {
+            const resultDiv = document.getElementById('scan-result'); 
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('ar-EG');
+            const selectedGroup = getSelectedScanGroup();
+
+            if (!isManual && student.groupGrade !== selectedGroup) {
+                playBeep('error');
+                resultDiv.innerHTML = `<div class="scan-card" style="border-right-color: var(--danger-color);">
+                    <div class="scan-card-info">
+                        <h3>❌ تنبيه عدم مطابقة المجموعة!</h3>
+                        <p style="color:var(--danger-color); font-weight:bold;">الطالب: ${student.name} ينتمي لـ (${student.groupGrade}) وليس (${selectedGroup})</p>
+                    </div>
+                </div>`;
+                return;
+            }
+
+            if (window.attendanceToday[student.barcode]) { 
+                playBeep('error'); 
+                resultDiv.innerHTML = `<div class="scan-card" style="border-right-color: var(--warning-color);">
+                    <div class="scan-card-info">
+                        <h3>ℹ️ تم تسجيل الدخول مسبقاً!</h3>
+                        <p>الطالب: <strong>${student.name}</strong> تم تسجيل مسحه مسبقاً اليوم.</p>
+                    </div>
+                </div>`;
+                return; 
+            }
+
+            const currentMinutes = now.getMinutes();
+            let calculatedStatus = currentMinutes >= 15 ? "تأخير" : "حضور";
+
+            if(!student.totalAttendanceDays) student.totalAttendanceDays = 0; 
+            student.totalAttendanceDays += 1;
+
+            const lastAttendanceStatus = student.lastAttendanceState || "أول حصة له";
+            const paymentInfo = window.payments[student.barcode] || { status: "لم يدفع" };
+            const paymentStatus = paymentInfo.status;
+
+            window.attendanceToday[student.barcode] = calculatedStatus; 
+            student.lastAttendanceState = calculatedStatus;
+            
+            if (window.sendLogToday[student.barcode]) delete window.sendLogToday[student.barcode];
+
+            if (!window.scanLogOrder) window.scanLogOrder = [];
+            
+            const recordedGroupText = isManual ? `${selectedGroup} (تعويض)` : student.groupGrade;
+
+            window.scanLogOrder.push({ 
+                barcode: student.barcode, 
+                name: student.name, 
+                groupText: recordedGroupText, 
+                time: timeStr, 
+                status: calculatedStatus,
+                paymentStatus: paymentStatus,
+                lastAttendance: lastAttendanceStatus
+            });
+
+            saveData();
+            playBeep(calculatedStatus === "حضور" ? 'success' : 'warning');
+            speakName(student.name);
+
+            const isPaid = paymentStatus === 'تم الدفع';
+            resultDiv.innerHTML = `
+                <div class="scan-card" style="border-right-color: ${calculatedStatus === 'حضور' ? 'var(--success-color)' : 'var(--warning-color)'}">
+                    <div class="scan-card-info">
+                        <h3>✅ ${student.name} (${calculatedStatus === 'حضور' ? 'حاضر في الموعد' : 'متأخر'}) ${isManual ? '<span style="color:var(--accent-cyan); font-size:14px;">[حصّة تعويض]</span>' : ''}</h3>
+                        <div class="scan-badges">
+                            <span class="badge ${isPaid ? 'badge-paid' : 'badge-unpaid'}">
+                                💳 الاشتراك: ${isPaid ? 'تم الدفع' : '⚠️ لم يدفع بعد'}
+                            </span>
+                            <span class="badge ${lastAttendanceStatus === 'غائب' ? 'badge-prev-abs' : 'badge-prev-att'}">
+                                📌 الحصة السابقة: ${lastAttendanceStatus}
+                            </span>
+                            <span class="badge" style="background:rgba(255,255,255,0.05); color:var(--text-main);">⏰ الدخول: ${timeStr}</span>
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        window.handleBarcodeScan = function(e) {
+            if (e.key === 'Enter') {
+                const barcode = e.target.value.trim(); 
+                e.target.value = '';
+                const student = window.students.find(s => s.barcode === barcode);
+                if (student) {
+                    processAttendanceRecord(student, false);
+                } else { 
+                    playBeep('error'); 
+                    document.getElementById('scan-result').innerHTML = `<div class="scan-card" style="border-right-color: var(--danger-color);">
+                        <div class="scan-card-info">
+                            <h3 style="color:var(--danger-color);">❌ الباركود غير مسجل في السيستم!</h3>
+                        </div>
+                    </div>`;
+                }
+            }
+        }
+
+        /* إضافة طالب يدويًا للتعويض في المجموعة الحالية */
+        window.addManualStudentAttendance = function() {
+            const inputField = document.getElementById('barcode-scanner-input');
+            const barcode = inputField.value.trim();
+            if (!barcode) {
+                alert("يرجى كتابة أو ضرب باركود الطالب في الخانة أولاً ثم الضغط على الزر!");
+                inputField.focus();
+                return;
+            }
+
+            const student = window.students.find(s => s.barcode === barcode);
+            if (student) {
+                processAttendanceRecord(student, true);
+                inputField.value = '';
+                inputField.focus();
+            } else {
+                playBeep('error');
+                alert("❌ الباركود المدخل غير موجود في سجلات الطلاب!");
+            }
+        }
+
+        window.finishGroupAttendance = function(isAuto = false) {
+            const activeGroup = getSelectedScanGroup();
+            
+            if (!isAuto) {
+                if (!confirm(`هل أنت تأكد من إغلاق أخذ حضور (${activeGroup}) وحفظ البيانات وإرسال الرسائل لجميع أولياء الأمور؟`)) return;
+            }
+
+            const groupStudents = window.students.filter(s => s.groupGrade === activeGroup);
+            let absentCount = 0;
+            window.whatsappQueue = [];
+
+            groupStudents.forEach(student => {
+                let status = window.attendanceToday[student.barcode];
+                
+                if (!status) {
+                    status = "غائب";
+                    window.attendanceToday[student.barcode] = "غائب";
+                    student.lastAttendanceState = "غائب";
+                    student.totalAbsentDays = (student.totalAbsentDays || 0) + 1;
+                    absentCount++;
+                }
+
+                if (status === "غائب" || status === "تأخير") {
+                    let formattedPhone = student.parentPhone.trim();
+                    if (formattedPhone.startsWith('0')) formattedPhone = '2' + formattedPhone;
+
+                    let msg = status === "غائب" 
+                        ? `تنبيه من الأستاذة إيمان الدمشتي - أستاذة الرياضيات 📐\nنود إحاطة علم سيادتكم بغياب الطالب/ة: ${student.name} عن حضور حصة الرياضيات اليوم (${activeGroup}).`
+                        : `تنبيه من الأستاذة إيمان الدمشتي - أستاذة الرياضيات 📐\nنود إحاطة علم سيادتكم بتأخر الطالب/ة: ${student.name} عن موعد الحصة اليوم (${activeGroup}).`;
+
+                    window.whatsappQueue.push({
+                        barcode: student.barcode,
+                        name: student.name,
+                        url: `whatsapp://send?phone=${formattedPhone}&text=${encodeURIComponent(msg)}`
+                    });
+                }
+            });
+
+            window.scanLogOrder = [];
+            saveData();
+
+            if (window.whatsappQueue.length > 0) {
+                document.getElementById('whatsapp-queue-banner').style.display = 'flex';
+                openNextWhatsappChat();
+            } else {
+                if(!isAuto) alert(`✅ تم حفظ البيانات بنجاح! جميع طلاب هذه المجموعة حاضرون في موعدهم.`);
+            }
+
+            document.getElementById('scan-result').innerHTML = '';
+        }
+
+        window.openNextWhatsappChat = function() {
+            if (!window.whatsappQueue || window.whatsappQueue.length === 0) {
+                document.getElementById('whatsapp-queue-banner').style.display = 'none';
+                alert("🎉 تم حفظ البيانات وإرسال كافة رسائل أولياء الأمور بنجاح!");
+                return;
+            }
+
+            const current = window.whatsappQueue.shift();
+            const totalRemaining = window.whatsappQueue.length;
+
+            document.getElementById('queue-status-text').innerHTML = `📲 جاري فتح شات ولي أمر الطالب: <strong>${current.name}</strong> (متبقي: ${totalRemaining})`;
+            
+            window.sendLogToday[current.barcode] = new Date().toLocaleTimeString('ar-EG');
+            saveData();
+
+            window.open(current.url, '_blank');
+
+            setTimeout(() => {
+                const btn = document.getElementById('next-queue-btn');
+                if(btn) btn.focus();
+            }, 300);
+        }
+
+        window.saveStudent = function(e) {
+            e.preventDefault(); 
+            const barcode = document.getElementById('stud-barcode').value.trim();
+            if(window.students.some(s => s.barcode === barcode)) { alert("الباركود مسجل مسبقاً!"); return; }
+            
+            const grade = document.getElementById('stud-grade-select').value;
+            const days = document.getElementById('stud-days-select').value;
+            const groupGrade = `${grade} (${days})`;
+
+            window.students.push({ 
+                barcode: barcode, 
+                name: document.getElementById('stud-name').value.trim(), 
+                phone: document.getElementById('stud-phone').value.trim(), 
+                parentPhone: document.getElementById('stud-parent-phone').value.trim(), 
+                groupGrade: groupGrade, 
+                lastExamTitle: "", 
+                lastExamScore: "", 
+                points: 0, 
+                totalExamScores: [], 
+                totalAttendanceDays: 0, 
+                totalAbsentDays: 0,
+                lastAttendanceState: "جديد"
+            });
+
+            window.payments[barcode] = { status: "لم يدفع", date: "-", rawTimestamp: 0 }; 
+            saveData(); 
+            alert("تم حفظ بيانات الطالب بنجاح!"); 
+            document.getElementById('student-form').reset();
+        }
+
+        window.openEditModal = function(barcode) {
+            const student = window.students.find(s => s.barcode === barcode); if(!student) return;
+            document.getElementById('edit-stud-barcode').value = student.barcode; 
+            document.getElementById('edit-stud-name').value = student.name; 
+            document.getElementById('edit-stud-phone').value = student.phone || ''; 
+            document.getElementById('edit-stud-parent-phone').value = student.parentPhone; 
+            
+            if (student.groupGrade) {
+                const match = student.groupGrade.match(/(.*)\s\((.*)\)/);
+                if (match) {
+                    document.getElementById('edit-stud-grade-select').value = match[1].trim();
+                    document.getElementById('edit-stud-days-select').value = match[2].trim();
+                }
+            }
+
+            document.getElementById('edit-student-modal').style.display = 'flex';
+        }
+
+        window.closeEditModal = function() { document.getElementById('edit-student-modal').style.display = 'none'; }
+
+        window.updateStudentData = function(e) {
+            e.preventDefault(); 
+            const barcode = document.getElementById('edit-stud-barcode').value; 
+            const index = window.students.findIndex(s => s.barcode === barcode);
+            if(index !== -1) {
+                const grade = document.getElementById('edit-stud-grade-select').value;
+                const days = document.getElementById('edit-stud-days-select').value;
+
+                window.students[index].name = document.getElementById('edit-stud-name').value.trim(); 
+                window.students[index].phone = document.getElementById('edit-stud-phone').value.trim(); 
+                window.students[index].parentPhone = document.getElementById('edit-stud-parent-phone').value.trim(); 
+                window.students[index].groupGrade = `${grade} (${days})`;
+                
+                saveData(); 
+                closeEditModal(); 
+                alert("تم تحديث بيانات الطالب بنجاح!");
+            }
+        }
+
+        /* 🔄 منطق ونافذة تغيير حالة الحضور والغياب للطالب */
+        window.openChangeStatusModal = function(barcode) {
+            const student = window.students.find(s => s.barcode === barcode);
+            if (!student) return;
+
+            const selectedDate = document.getElementById('attendance-history-date-picker').value || getTodayKey();
+            const dateRecord = (window.attendanceHistory && window.attendanceHistory[selectedDate]) 
+                ? window.attendanceHistory[selectedDate] 
+                : (selectedDate === getTodayKey() ? window.attendanceToday : {});
+
+            const currentStatus = dateRecord[barcode] || "غائب";
+
+            document.getElementById('status-stud-barcode').value = student.barcode;
+            document.getElementById('status-stud-name').value = student.name;
+            document.getElementById('status-stud-date-info').value = `التاريخ: ${selectedDate} | الحالة: (${currentStatus})`;
+            document.getElementById('status-new-select').value = currentStatus;
+
+            document.getElementById('change-status-modal').style.display = 'flex';
+        }
+
+        window.closeStatusModal = function() {
+            document.getElementById('change-status-modal').style.display = 'none';
+        }
+
+        window.updateStudentStatus = function(e) {
+            e.preventDefault();
+            const barcode = document.getElementById('status-stud-barcode').value;
+            const newStatus = document.getElementById('status-new-select').value;
+            const selectedDate = document.getElementById('attendance-history-date-picker').value || getTodayKey();
+
+            const student = window.students.find(s => s.barcode === barcode);
+            if (!student) return;
+
+            if (!window.attendanceHistory) window.attendanceHistory = {};
+            if (!window.attendanceHistory[selectedDate]) window.attendanceHistory[selectedDate] = {};
+
+            const oldStatus = window.attendanceHistory[selectedDate][barcode] || "غائب";
+
+            if (oldStatus !== newStatus) {
+                // تعديل العداد التراكمي للطالب
+                if (oldStatus === "غائب" && (newStatus === "حضور" || newStatus === "تأخير")) {
+                    student.totalAbsentDays = Math.max(0, (student.totalAbsentDays || 0) - 1);
+                    student.totalAttendanceDays = (student.totalAttendanceDays || 0) + 1;
+                } else if ((oldStatus === "حضور" || oldStatus === "تأخير") && newStatus === "غائب") {
+                    student.totalAttendanceDays = Math.max(0, (student.totalAttendanceDays || 0) - 1);
+                    student.totalAbsentDays = (student.totalAbsentDays || 0) + 1;
+                }
+
+                window.attendanceHistory[selectedDate][barcode] = newStatus;
+
+                if (selectedDate === getTodayKey()) {
+                    window.attendanceToday[barcode] = newStatus;
+                    student.lastAttendanceState = newStatus;
+                }
+
+                saveData();
+                closeStatusModal();
+                alert(`✅ تم تعديل حالة الطالب (${student.name}) إلى "${newStatus}" بنجاح!`);
+            } else {
+                closeStatusModal();
+            }
+        }
+
+        window.saveGradeDirectly = function(e) {
+            e.preventDefault(); 
+            const barcode = document.getElementById('exam-student-barcode').value.trim(); 
+            const examTitle = document.getElementById('exam-title').value.trim(); 
+            const scoreStr = document.getElementById('exam-score').value.trim();
+            const studentIndex = window.students.findIndex(s => s.barcode === barcode); 
+            if (studentIndex === -1) { alert("الباركود غير صحيح!"); return; }
+            
+            const parts = scoreStr.match(/\d+/g); let percentScore = 100; let isFullScore = false;
+            if(parts && parts.length >= 2) { 
+                percentScore = (parseFloat(parts[0]) / parseFloat(parts[1])) * 100; 
+                if (parseFloat(parts[0]) === parseFloat(parts[1])) isFullScore = true;
+            } else if (parts && parts.length == 1) { 
+                percentScore = parseFloat(parts[0]); 
+                if (percentScore === 100) isFullScore = true;
+            }
+            
+            if(!window.students[studentIndex].totalExamScores) window.students[studentIndex].totalExamScores = []; 
+            window.students[studentIndex].totalExamScores.push(percentScore);
+            window.students[studentIndex].lastExamTitle = examTitle; 
+            window.students[studentIndex].lastExamScore = scoreStr;
+            
+            if (isFullScore) {
+                if (!window.students[studentIndex].points) window.students[studentIndex].points = 0;
+                window.students[studentIndex].points += 1;
+                alert(`🎉 الطالب تقفيل ممتاز! تم منح +1 نقطة تلقائياً.`);
+            }
+            
+            saveData(); 
+            document.getElementById('exam-student-barcode').value = ''; 
+            document.getElementById('exam-score').value = ''; 
+            alert(`تم ربط النتيجة وحساب النسبة التراكمية بنجاح!`);
+        }
+
+        /* 💰 نظام المصروفات بحد أدنى 20 يوماً بين كل دفعة للطالب */
+        window.payExpenses = function() {
+            const barcode = document.getElementById('expense-search-barcode').value.trim(); 
+            const student = window.students.find(s => s.barcode === barcode); 
+            if (!student) { alert("الطالب غير مسجل!"); return; }
+            
+            const nowTimestamp = Date.now();
+            const currentPaymentRecord = window.payments[barcode];
+
+            if (currentPaymentRecord && currentPaymentRecord.rawTimestamp) {
+                const diffTime = nowTimestamp - currentPaymentRecord.rawTimestamp;
+                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                
+                if (diffDays < 20) {
+                    alert(`⚠️ عذراً! لا يمكن دفع اشتراك جديد لهذا الطالب الآن.\nآخر تاريخ سداد كان منذ (${diffDays} يوم) فقط.\nالحد الأدنى المسموح به بين الدفعتين هو 20 يوماً.`);
+                    document.getElementById('expense-search-barcode').value = '';
+                    return;
+                }
+            }
+
+            if (prompt("الرجاء إدخال كلمة المرور لتأكيد دفع الاشتراك المالي:") !== window.adminPassword) { 
+                alert("❌ كلمة المرور خاطئة!"); 
+                return; 
+            }
+            
+            const payDateObj = new Date();
+            const payDateStr = payDateObj.toLocaleDateString('ar-EG');
+            
+            const nextDueDateObj = new Date(payDateObj.getTime() + (20 * 24 * 60 * 60 * 1000));
+            const nextDueDateStr = nextDueDateObj.toLocaleDateString('ar-EG');
+
+            window.payments[barcode] = { 
+                status: "تم الدفع", 
+                date: payDateStr, 
+                nextDueDate: nextDueDateStr,
+                rawTimestamp: nowTimestamp 
+            }; 
+            
+            saveData();
+            document.getElementById('expense-search-barcode').value = ''; 
+            
+            let formattedPhone = student.parentPhone.trim(); 
+            if(formattedPhone.startsWith('0')) formattedPhone = '2' + formattedPhone;
+            
+            const message = `إشعار دفع اشتراك - الأستاذة إيمان الدمشتي 📐\nتم استلام دفعة الاشتراك بنجاح لـ: ${student.name}\nتاريخ السداد: ${payDateStr}\nتاريخ الاستحقاق القادم: ${nextDueDateStr}`;
+            
+            window.open(`whatsapp://send?phone=${formattedPhone}&text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        window.renderExpenses = function() {
+            const tbody = document.getElementById('expenses-table-body'); 
+            if(!tbody) return; 
+            tbody.innerHTML = '';
+            
+            let paidCount = 0;
+            let unpaidCount = 0;
+
+            window.students.forEach(student => { 
+                const pay = window.payments[student.barcode] || { status: "لم يدفع", date: "-", nextDueDate: "-" }; 
+                if (pay.status === 'تم الدفع') paidCount++; else unpaidCount++;
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${student.barcode}</td>
+                        <td><strong>${student.name}</strong></td>
+                        <td>${pay.date}</td>
+                        <td><span style="color:var(--primary-gold); font-weight:bold;">${pay.nextDueDate || '-'}</span></td>
+                        <td class="${pay.status === 'تم الدفع' ? 'status-paid' : 'status-unpaid'}">${pay.status}</td>
+                    </tr>`; 
+            });
+
+            document.getElementById('financial-paid-count').innerText = paidCount;
+            document.getElementById('financial-unpaid-count').innerText = unpaidCount;
+        }
+
+        window.renderAttendanceStats = function() {
+            const tbody = document.getElementById('daily-attendance-table-body'); if(!tbody) return; tbody.innerHTML = '';
+            
+            const selectedDate = document.getElementById('attendance-history-date-picker').value || getTodayKey();
+            const dateRecord = (window.attendanceHistory && window.attendanceHistory[selectedDate]) ? window.attendanceHistory[selectedDate] : (selectedDate === getTodayKey() ? window.attendanceToday : {});
+
+            const filterGrade = document.getElementById('filter-grade-select').value;
+            const filterDays = document.getElementById('filter-days-select').value;
+            let present = 0, absent = 0, totalFiltered = 0;
+            
+            window.students.forEach(student => {
+                if (filterGrade !== 'ALL' && !student.groupGrade.includes(filterGrade)) return;
+                if (filterDays !== 'ALL' && !student.groupGrade.includes(filterDays)) return;
+                
+                totalFiltered++;
+                
+                let rawStatus = dateRecord[student.barcode] || "غائب";
+                if (rawStatus === "غائب") absent++; else present++;
+                
+                let statusText = "";
+                let actionButton = "";
+                
+                if (rawStatus === "حضور") {
+                    statusText = "<span style='color:#10b981; font-weight:bold;'>حاضر</span>";
+                } else if (rawStatus === "تأخير") {
+                    statusText = "<span style='color:#f59e0b; font-weight:bold;'>متأخر</span>";
+                } else {
+                    statusText = "<span style='color:#f43f5e; font-weight:bold;'>غائب</span>";
+                }
+                
+                actionButton = `
+                    <button class="btn" style="background-color: #0284c7; color:#fff; padding: 4px 10px; font-size: 12px;" onclick="openChangeStatusModal('${student.barcode}')">🔄 تغيير الحالة</button>
+                    <button class="btn" style="background-color: #25D366; color:#fff; padding: 4px 10px; font-size: 12px; margin-right:5px;" onclick="sendSingleAbsenceMessage('${student.barcode}')">✉️ مراسلة</button>
+                `;
+                
+                tbody.innerHTML += `<tr><td>${student.barcode}</td><td>${student.name}</td><td>${student.groupGrade}</td><td>${statusText}</td><td>${student.parentPhone}</td><td>${actionButton}</td></tr>`;
+            });
+            document.getElementById('total-students-count').innerText = totalFiltered; 
+            document.getElementById('present-count').innerText = present; 
+            document.getElementById('absent-count').innerText = absent;
+        }
+
+        window.renderCumulativeTable = function() {
+            const tbody = document.getElementById('cumulative-table-body'); if(!tbody) return; tbody.innerHTML = '';
+            const searchVal = document.getElementById('search-cumulative-input') ? document.getElementById('search-cumulative-input').value.trim().toLowerCase() : '';
+            
+            window.students.forEach(student => {
+                if(searchVal && !student.name.toLowerCase().includes(searchVal) && !student.barcode.toLowerCase().includes(searchVal)) return;
+
+                const attRate = getAttendanceRate(student);
+                const absRate = getAbsenceRate(student);
+                const gradeAvg = getExamAverage(student);
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${student.barcode}</td>
+                        <td><strong>${student.name}</strong></td>
+                        <td>${student.groupGrade}</td>
+                        <td><span class="student-metric-tag tag-attendance" style="font-size:13px; padding:4px 8px;">${attRate}%</span></td>
+                        <td><span class="student-metric-tag tag-absence" style="font-size:13px; padding:4px 8px;">${absRate}%</span></td>
+                        <td><span class="student-metric-tag tag-grade" style="font-size:13px; padding:4px 8px;">${gradeAvg}%</span></td>
+                        <td><strong style="color:var(--primary-gold);">${student.points || 0} نقطة</strong></td>
+                    </tr>`;
+            });
+        }
+
+        window.sendSingleAbsenceMessage = function(barcode) {
+            const student = window.students.find(s => s.barcode === barcode); if (!student) return;
+            let formattedPhone = student.parentPhone.trim(); if(formattedPhone.startsWith('0')) formattedPhone = '2' + formattedPhone;
+            const attendanceStatus = window.attendanceToday[barcode] || "غائب";
+            let message = "";
+            if (attendanceStatus === "غائب") {
+                message = `تنبيه من الأستاذة إيمان الدمشتي - أستاذة الرياضيات 📐\nنود إحاطة علم سيادتكم بغياب الطالب/ة: ${student.name} عن حضور مجموعة الرياضيات اليوم ونرجو المتابعة.`;
+            } else {
+                let attendanceText = attendanceStatus === "حضور" ? "✅ حاضر (في الموعد)" : "⚠️ متأخر";
+                message = `الأستاذة إيمان الدمشتي - أستاذة الرياضيات 📐\nإلى ولي أمر الطالب/ة: ${student.name}\n\n📊 حضور اليوم:\n${attendanceText}`;
+            }
+            window.open(`whatsapp://send?phone=${formattedPhone}&text=${encodeURIComponent(message)}`, '_blank');
+            window.sendLogToday[student.barcode] = new Date().toLocaleTimeString('ar-EG'); 
+            saveData();
+        }
+
+        window.exportAttendanceToExcel = function() {
+            const selectedDate = document.getElementById('attendance-history-date-picker').value || getTodayKey();
+            const dateRecord = (window.attendanceHistory && window.attendanceHistory[selectedDate]) ? window.attendanceHistory[selectedDate] : window.attendanceToday;
+
+            let csvContent = "\uFEFFالباركود,اسم الطالب,المجموعة,حالة الحضور,رقم ولي الأمر\n";
+            window.students.forEach(student => { 
+                csvContent += `"${student.barcode}","${student.name}","${student.groupGrade}","${dateRecord[student.barcode]||'غائب'}","${student.parentPhone}"\n`; 
+            });
+            const link = document.createElement("a"); 
+            link.setAttribute("href", URL.createObjectURL(new Blob([csvContent], { type: 'text/csv;charset=utf-8;' }))); 
+            link.setAttribute("download", `تقرير_الحضور_${selectedDate}.csv`); 
+            link.click();
+        }
+
+        /* 📄 تصدير ملف PDF المطور مع نسبة الغياب التراكمية وإرساله */
+        window.exportAbsencePDFAndSendWhatsApp = function() {
+            const todayDateStr = new Date().toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            
+            const groupedData = {};
+            window.students.forEach(student => {
+                const status = window.attendanceToday[student.barcode] || "غائب";
+                if (status === "غائب" || status === "تأخير") {
+                    const groupName = student.groupGrade || "غير محدد";
+                    if (!groupedData[groupName]) {
+                        groupedData[groupName] = [];
+                    }
+                    groupedData[groupName].push({
+                        barcode: student.barcode,
+                        name: student.name,
+                        phone: student.phone || "-",
+                        parentPhone: student.parentPhone || "-",
+                        absenceRate: getAbsenceRate(student),
+                        status: status === "تأخير" ? "⚠️ متأخر" : "❌ غائب"
+                    });
+                }
+            });
+
+            const groupKeys = Object.keys(groupedData);
+            if (groupKeys.length === 0) {
+                alert("🎉 ممتاز! لا يوجد غياب أو تأخير مسجل ليوم اليوم.");
+                return;
+            }
+
+            const pdfContainer = document.getElementById('pdf-export-container');
+            pdfContainer.innerHTML = '';
+
+            groupKeys.forEach((groupName) => {
+                const pageDiv = document.createElement('div');
+                pageDiv.className = 'pdf-page';
+                
+                let rowsHtml = '';
+                groupedData[groupName].forEach((st, idx) => {
+                    rowsHtml += `
+                        <tr>
+                            <td>${idx + 1}</td>
+                            <td>${st.barcode}</td>
+                            <td><strong>${st.name}</strong></td>
+                            <td>${st.phone}</td>
+                            <td>${st.parentPhone}</td>
+                            <td><span style="color:#ef4444; font-weight:bold;">${st.absenceRate}%</span></td>
+                            <td><strong>${st.status}</strong></td>
+                        </tr>
+                    `;
+                });
+
+                pageDiv.innerHTML = `
+                    <div class="pdf-header">
+                        <h2>📐 منظومة الأستاذة إيمان الدمشتي - أستاذة الرياضيات</h2>
+                        <p><strong>تقرير الغياب والتأخير اليومي الشامل</strong></p>
+                        <p>📅 التاريخ: ${todayDateStr} | 👥 المجموعة: <strong>${groupName}</strong></p>
+                    </div>
+                    <table class="pdf-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>الباركود</th>
+                                <th>اسم الطالب</th>
+                                <th>تليفون الطالب</th>
+                                <th>تليفون ولي الأمر</th>
+                                <th>نسبة الغياب العامة</th>
+                                <th>حالة اليوم</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rowsHtml}
+                        </tbody>
+                    </table>
+                `;
+                pdfContainer.appendChild(pageDiv);
+            });
+
+            pdfContainer.style.display = 'block';
+
+            const opt = {
+                margin:       10,
+                filename:     `تقرير_الغياب_والتأخير_${new Date().toLocaleDateString('en-CA')}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(pdfContainer).save().then(() => {
+                pdfContainer.style.display = 'none';
+                
+                const teacherPhone = "201070642904";
+                const messageText = `أهلاً مس إيمان 📐\nتم تصدير تقرير الغياب والتأخير ليوم (${todayDateStr}) بنجاح كملف PDF.\nتجدين التقرير جاهز ومحمل على الجهاز للإرفاق 📄.`;
+                
+                window.open(`whatsapp://send?phone=${teacherPhone}&text=${encodeURIComponent(messageText)}`, '_blank');
+            });
+        }
+
+        window.adjustPoints = function(barcode, val) {
+            const idx = window.students.findIndex(s => s.barcode === barcode); 
+            if(idx !== -1) { 
+                if(!window.students[idx].points) window.students[idx].points = 0; 
+                window.students[idx].points += val; 
+                if(window.students[idx].points < 0) window.students[idx].points = 0; 
+                saveData(); 
+            }
+        }
+
+        window.renderManageStudentsTable = function() {
+            const tbody = document.getElementById('manage-students-table-body'); if(!tbody) return; tbody.innerHTML = '';
+            const searchVal = document.getElementById('search-manage-input') ? document.getElementById('search-manage-input').value.trim().toLowerCase() : '';
+
+            window.students.forEach(student => {
+                if(searchVal && !student.name.toLowerCase().includes(searchVal) && !student.barcode.toLowerCase().includes(searchVal) && !student.phone.includes(searchVal)) return;
+
+                tbody.innerHTML += `<tr><td>${student.barcode}</td><td><strong>${student.name}</strong></td><td><button style="background:none; border:1px solid var(--card-border); color:var(--text-main); padding:2px 8px; border-radius:4px; cursor:pointer;" onclick="adjustPoints('${student.barcode}', -1)">-</button><span style="margin:0 10px;">${student.points||0} نقطة</span><button style="background:none; border:1px solid var(--card-border); color:var(--text-main); padding:2px 8px; border-radius:4px; cursor:pointer;" onclick="adjustPoints('${student.barcode}', 1)">+</button></td><td>${getExamAverage(student)}%</td><td>${getAbsenceRate(student)}%</td><td><button class="btn" style="background-color: #0284c7; color:#fff; padding: 5px 10px; font-size: 12px;" onclick="openEditModal('${student.barcode}')">✏️ تعديل</button> <button class="btn" style="background-color: var(--danger-color); color:#fff; font-size: 12px; padding: 5px 10px;" onclick="deleteStudent('${student.barcode}')">❌ حذف</button></td></tr>`;
+            });
+        }
+
+        window.deleteStudent = function(barcode) { if (confirm(`هل أنت تأكد من حذف الطالب؟`)) { window.students = window.students.filter(s => s.barcode !== barcode); saveData(); } }
+
+        window.clearAllSystemData = function() {
+            if (!confirm("⚠️ تحذير شديد الخطورة!\nهل أنت متأكد من مسح كافة بيانات السيستم (جميع الطلاب، الحضور، الدرجات والاشتراكات)؟")) return;
+            
+            const pwd = prompt("🔐 يرجى إدخال كلمة المرور السريعة لتأكيد المسح الشامل:");
+            if (pwd !== window.adminPassword) {
+                alert("❌ كلمة المرور غير صحيحة! تم إلغاء عملية المسح.");
+                return;
+            }
+
+            if (confirm("🚨 تأكيد نهائي: سيتما محو كل الشاشات والبيانات المسجلة بالكامل ولن تتمكن من استرجاعها! هل تريد المتابعة؟")) {
+                window.students = [];
+                window.attendanceHistory = {};
+                window.attendanceToday = {};
+                window.payments = {};
+                window.sendLogToday = {};
+                window.scanLogOrder = [];
+                
+                localStorage.removeItem('center_data');
+                saveData();
+                alert("🗑️ تم مسح كافة بيانات السيستم بنجاح!");
+                location.reload();
+            }
+        }
+
+        window.switchTab = function(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active')); 
+            document.querySelectorAll('.menu-btn').forEach(btn => btn.classList.remove('active')); 
+            document.getElementById(tabId).classList.add('active'); 
+            event.target.classList.add('active');
+            
+            if (tabId === 'attendance-scan-tab') { setTimeout(() => document.getElementById('barcode-scanner-input').focus(), 100); renderScanLogTable(); }
+            if (tabId === 'stats-tab') renderAttendanceStats();
+            if (tabId === 'cumulative-report-tab') { renderCumulativeTable(); }
+            if (tabId === 'expenses-tab') renderExpenses(); 
+            if (tabId === 'whatsapp-engine-tab') { renderSideDirectory(); populateDirectStudentDropdown(); } 
+            if (tabId === 'manage-students-tab') renderManageStudentsTable();
+        }
+
+        window.onload = function() { loadInitialData(); };
+    </script>
+</body>
+</html>
